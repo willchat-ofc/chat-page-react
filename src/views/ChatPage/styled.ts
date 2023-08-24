@@ -13,7 +13,11 @@ export const ChatPageStyled = styled.div`
 
 export const ChatFormStyled = styled.form`
   width: 49%;
-  .send-text-area {
+  .user-name {
+    margin: 10px 0;
+  }
+
+  .send-message-area {
     display: flex;
     width: 100%;
     margin: 10px 0;

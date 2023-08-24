@@ -9,11 +9,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage } from "../../slices/messages/messagesSlice";
 import { RootState } from "../../app/store";
+import { Message } from "../../components/Message";
 
 export const ChatPage = () => {
   interface UserMessage {
-    name: string;
-    text: string;
+    userName: string;
+    message: string;
+    id: string;
   }
 
   const { register, handleSubmit } = useForm<UserMessage>();
@@ -29,24 +31,24 @@ export const ChatPage = () => {
     <ChatPageStyled>
       <ChatFormStyled onSubmit={handleSubmit(onSubmit)}>
         <ChatPageInputStyled
-          type="text"
-          {...register("name", { required: true })}
+          type="message"
+          {...register("userName", { required: true })}
           autoComplete="off"
+          className="user-name"
         />
         <MessagesPanelStyled>
-          {messages.map((message) => {
-            return (
-              <div>
-                <span>{message.name}</span>
-                <p>{message.text}</p>
-              </div>
-            );
-          })}
+          {messages.map((message) => (
+            <Message
+              name={message.userName}
+              text={message.message}
+              key={message.id}
+            />
+          ))}
         </MessagesPanelStyled>
-        <div className="send-text-area">
+        <div className="send-message-area">
           <ChatPageInputStyled
-            type="text"
-            {...register("text", { required: true })}
+            type="message"
+            {...register("message", { required: true })}
             autoComplete="off"
           />
           <ButtonStyled>Enviar</ButtonStyled>
