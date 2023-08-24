@@ -18,10 +18,14 @@ export const ChatPage = () => {
     id: string;
   }
 
-  const { register, handleSubmit } = useForm<UserMessage>();
+  const { register, handleSubmit, reset } = useForm<UserMessage>();
   const dispatch = useDispatch();
   const onSubmit: SubmitHandler<UserMessage> = (data) => {
     dispatch(addMessage(data));
+    reset({
+      ...data,
+      message: "",
+    });
   };
 
   const messages = useSelector((state: RootState) => state.messages.messages);
