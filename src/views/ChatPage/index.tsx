@@ -7,7 +7,7 @@ import {
   MessagesPanelStyled,
 } from "./styled";
 import { useDispatch, useSelector } from "react-redux";
-import { addMessage } from "../../slices/messages/messagesSlice";
+import { addMessage, sendMessage } from "../../slices/messages/messagesSlice";
 import { RootState } from "../../app/store";
 import { Message } from "../../components/Message";
 import { useEffect } from "react";
@@ -23,6 +23,7 @@ export const ChatPage = () => {
   const dispatch = useDispatch();
   const onSubmit: SubmitHandler<UserMessage> = (data) => {
     dispatch(addMessage(data));
+    dispatch(sendMessage(data));
     reset({
       ...data,
       message: "",
@@ -32,9 +33,14 @@ export const ChatPage = () => {
   useEffect(() => {
     dispatch({
       type: "WEBSOCKET_CONNECT",
-      payload: { url: "wss://will-chat.hopto.org:7070/" },
+      payload: { url: "http://localhost:8080" }, //wss://will-chat.hopto.org:7070/
     });
-    return;
+
+    return () => {
+      dispatch({
+        type: "WEBSOCKET_DISCONNECT",
+      });
+    };
   }, []);
 
   const messages = useSelector((state: RootState) => state.messages.messages);
@@ -48,11 +54,11 @@ export const ChatPage = () => {
           className="user-name"
         />
         <MessagesPanelStyled>
-          {messages.map((message) => (
+          {messages.map((message, index) => (
             <Message
               name={message.userName}
               text={message.message}
-              key={message.id}
+              key={index}
             />
           ))}
         </MessagesPanelStyled>
