@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 
 export const MessageStyled = styled.div`
   margin-bottom: 8px;
-  margin-left: 8px;
+  margin-left: 10px;
   margin-top: 4px;
   padding: 6px 8px 8px 9px;
   display: flex;
