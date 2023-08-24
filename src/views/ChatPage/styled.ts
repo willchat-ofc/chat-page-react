@@ -24,8 +24,13 @@ export const ChatFormStyled = styled.form`
   }
 
   ::-webkit-scrollbar {
-    background-color: #181714;
+    background-color: #181714b5;
     color: #d3c09f;
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #4e4a40b5;
   }
 `;
 
