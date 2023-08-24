@@ -33,7 +33,16 @@ export const ChatPage = () => {
           {...register("name", { required: true })}
           autoComplete="off"
         />
-        <MessagesPanelStyled></MessagesPanelStyled>
+        <MessagesPanelStyled>
+          {messages.map((message) => {
+            return (
+              <div>
+                <span>{message.name}</span>
+                <p>{message.text}</p>
+              </div>
+            );
+          })}
+        </MessagesPanelStyled>
         <div className="send-text-area">
           <ChatPageInputStyled
             type="text"
