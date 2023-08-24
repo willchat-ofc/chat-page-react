@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addMessage } from "../../slices/messages/messagesSlice";
 import { RootState } from "../../app/store";
 import { Message } from "../../components/Message";
+import { useEffect } from "react";
 
 export const ChatPage = () => {
   interface UserMessage {
@@ -28,9 +29,15 @@ export const ChatPage = () => {
     });
   };
 
-  const messages = useSelector((state: RootState) => state.messages.messages);
-  console.log(messages);
+  useEffect(() => {
+    dispatch({
+      type: "WEBSOCKET_CONNECT",
+      payload: { url: "wss://will-chat.hopto.org:7070/" },
+    });
+    return;
+  }, []);
 
+  const messages = useSelector((state: RootState) => state.messages.messages);
   return (
     <ChatPageStyled>
       <ChatFormStyled onSubmit={handleSubmit(onSubmit)}>

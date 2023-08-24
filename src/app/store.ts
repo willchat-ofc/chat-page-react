@@ -1,10 +1,10 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import messagesSlice from "../slices/messages/messagesSlice";
+import { rootReducer } from "../slices/combine-reducers";
+import websocketMiddleware from "../middlewares/websocket/websocketMiddlewate";
 
 export const store = configureStore({
-  reducer: {
-    messages: messagesSlice,
-  },
+  reducer: rootReducer,
+  middleware: (getDefault) => getDefault().concat(websocketMiddleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
