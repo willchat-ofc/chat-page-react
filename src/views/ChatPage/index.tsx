@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addMessage, sendMessage } from "../../slices/messages/messagesSlice";
 import { RootState } from "../../app/store";
 import { Message } from "../../components/Message";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export const ChatPage = () => {
   interface UserMessage {
@@ -19,21 +19,11 @@ export const ChatPage = () => {
     id: string;
   }
 
-  const { register, handleSubmit, reset } = useForm<UserMessage>();
   const dispatch = useDispatch();
-  const onSubmit: SubmitHandler<UserMessage> = (data) => {
-    dispatch(addMessage(data));
-    dispatch(sendMessage(data));
-    reset({
-      ...data,
-      message: "",
-    });
-  };
-
   useEffect(() => {
     dispatch({
       type: "WEBSOCKET_CONNECT",
-      payload: { url: "http://localhost:8080" }, //wss://will-chat.hopto.org:7070/
+      payload: { url: "wss://will-chat.hopto.org:7070/" }, //wss://will-chat.hopto.org:7070/
     });
 
     return () => {
@@ -43,7 +33,26 @@ export const ChatPage = () => {
     };
   }, []);
 
-  const messages = useSelector((state: RootState) => state.messages.messages);
+  const { register, handleSubmit, reset } = useForm<UserMessage>();
+  const messagesPanelRef = useRef<HTMLDivElement | null>(null);
+  const onSubmit: SubmitHandler<UserMessage> = (data) => {
+    dispatch(addMessage(data));
+    dispatch(sendMessage(data));
+
+    reset({
+      ...data,
+      message: "",
+    });
+  };
+
+  const messages = useSelector((state: RootState) => {
+    moveToTheBottom(messagesPanelRef);
+    return state.messages.messages;
+  });
+  useEffect(() => {
+    moveToTheBottom(messagesPanelRef); // Chamada para mover o scroll para baixo
+  }, [messages]); // Executa o efeito toda vez que as mensagens são atualizadas
+
   return (
     <ChatPageStyled>
       <ChatFormStyled onSubmit={handleSubmit(onSubmit)}>
@@ -53,7 +62,7 @@ export const ChatPage = () => {
           autoComplete="off"
           className="user-name"
         />
-        <MessagesPanelStyled>
+        <MessagesPanelStyled ref={messagesPanelRef}>
           {messages.map((message, index) => (
             <Message
               name={message.userName}
@@ -73,4 +82,12 @@ export const ChatPage = () => {
       </ChatFormStyled>
     </ChatPageStyled>
   );
+};
+
+const moveToTheBottom = (
+  ref: React.MutableRefObject<HTMLDivElement | null>
+) => {
+  if (ref.current) {
+    ref.current.scrollTo(0, ref.current.scrollHeight);
+  }
 };

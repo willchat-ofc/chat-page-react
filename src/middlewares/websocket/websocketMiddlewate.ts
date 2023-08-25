@@ -22,8 +22,6 @@ const websocketMiddleware: Middleware = (storeAPI) => {
         });
 
         socket.on("ReceiveMessages", (value) => {
-          console.log(value);
-
           for (let msg of value) {
             storeAPI.dispatch(addMessage(msg));
           }

@@ -24,7 +24,6 @@ const messagesSlice = createSlice({
       state.messages.push(payload);
     },
     sendMessage: (state, { payload }: PayloadAction<Message>) => {
-      console.log(payload, "enviar");
       socket.emit("SendMessage", {
         ...payload,
         userId: "123",
