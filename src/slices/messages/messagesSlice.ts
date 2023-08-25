@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { socket } from "../../middlewares/websocket/websocketMiddlewate";
 
-interface Message {
+export interface Message {
   userName: string;
   message: string;
   id: string;

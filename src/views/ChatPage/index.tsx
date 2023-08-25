@@ -4,15 +4,14 @@ import {
   ChatFormStyled,
   ChatPageInputStyled,
   ChatPageStyled,
-  MessagesPanelStyled,
 } from "./styled";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import { Message } from "../../components/Message";
 import { useEffect, useRef } from "react";
-import { MyMessage } from "../../components/MyMessage";
 import { WebSocketConnection } from "../../components/views/ChatPage/WebSocketConnection";
 import { onSubmit } from "../../components/views/ChatPage/onSubmit";
+import { MessagePanel } from "../../components/MessagePanel";
+import { moveToTheBottom } from "../../components/views/ChatPage/moveToTheBottom";
 export interface UserMessage {
   userName: string;
   message: string;
@@ -44,21 +43,7 @@ export const ChatPage = () => {
             autoComplete="off"
             className="user-name"
           />
-          <MessagesPanelStyled ref={messagesPanelRef}>
-            {messages.map((message, index) =>
-              message.isMyMessage ? (
-                <div className="my-name-container" key={index}>
-                  <MyMessage name={message.userName} text={message.message} />
-                </div>
-              ) : (
-                <Message
-                  name={message.userName}
-                  text={message.message}
-                  key={index}
-                />
-              )
-            )}
-          </MessagesPanelStyled>
+          <MessagePanel messages={messages} reference={messagesPanelRef} />
           <div className="send-message-area">
             <ChatPageInputStyled
               type="message"
@@ -71,12 +56,4 @@ export const ChatPage = () => {
       </ChatPageStyled>
     </div>
   );
-};
-
-const moveToTheBottom = (
-  ref: React.MutableRefObject<HTMLDivElement | null>
-) => {
-  if (ref.current) {
-    ref.current.scrollTo(0, ref.current.scrollHeight);
-  }
 };
