@@ -14,11 +14,11 @@ const websocketMiddleware: Middleware = (storeAPI) => {
         });
 
         socket.emit("JoinGroup", {
-          key: "a688123fcfdcfa08b6934839ea4276",
+          key: action.payload.key,
         });
 
         socket.emit("ReceiveAllMessages", {
-          key: "a688123fcfdcfa08b6934839ea4276",
+          key: action.payload.key,
         });
 
         socket.on("ReceiveMessages", (value) => {
@@ -26,11 +26,6 @@ const websocketMiddleware: Middleware = (storeAPI) => {
             storeAPI.dispatch(addMessage(msg));
           }
         });
-        break;
-      case "WEBSOCKET_SEND":
-        if (socket.active) {
-          socket.send(JSON.stringify(action.payload));
-        }
         break;
       case "WEBSOCKET_DISCONNECT":
         socket.disconnect();
