@@ -11,6 +11,7 @@ import { addMessage, sendMessage } from "../../slices/messages/messagesSlice";
 import { RootState } from "../../app/store";
 import { Message } from "../../components/Message";
 import { useEffect, useRef } from "react";
+import { MyMessage } from "../../components/MyMessage";
 
 export const ChatPage = () => {
   interface UserMessage {
@@ -36,7 +37,7 @@ export const ChatPage = () => {
   const { register, handleSubmit, reset } = useForm<UserMessage>();
   const messagesPanelRef = useRef<HTMLDivElement | null>(null);
   const onSubmit: SubmitHandler<UserMessage> = (data) => {
-    dispatch(addMessage(data));
+    dispatch(addMessage({ ...data, isMyMessage: true }));
     dispatch(sendMessage(data));
 
     reset({
@@ -63,13 +64,19 @@ export const ChatPage = () => {
           className="user-name"
         />
         <MessagesPanelStyled ref={messagesPanelRef}>
-          {messages.map((message, index) => (
-            <Message
-              name={message.userName}
-              text={message.message}
-              key={index}
-            />
-          ))}
+          {messages.map((message, index) =>
+            message.isMyMessage ? (
+              <div className="my-name-container" key={index}>
+                <MyMessage name={message.userName} text={message.message} />
+              </div>
+            ) : (
+              <Message
+                name={message.userName}
+                text={message.message}
+                key={index}
+              />
+            )
+          )}
         </MessagesPanelStyled>
         <div className="send-message-area">
           <ChatPageInputStyled

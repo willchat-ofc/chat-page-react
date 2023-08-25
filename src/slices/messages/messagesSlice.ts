@@ -6,6 +6,7 @@ interface Message {
   userName: string;
   message: string;
   id: string;
+  isMyMessage?: boolean;
 }
 
 interface MessagesState {

@@ -57,6 +57,12 @@ export const MessagesPanelStyled = styled.div`
   word-wrap: break-word;
   border-radius: 10px;
   font-size: 1.25rem;
+
+  .my-name-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
 `;
 
 export const ButtonStyled = styled.button`
