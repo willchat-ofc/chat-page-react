@@ -9,9 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { useEffect, useRef } from "react";
 import { WebSocketConnection } from "../../components/views/ChatPage/WebSocketConnection";
-import { onSubmit } from "../../components/views/ChatPage/onSubmit";
 import { MessagePanel } from "../../components/MessagePanel";
 import { moveToTheBottom } from "../../components/views/ChatPage/moveToTheBottom";
+import { addMessage, sendMessage } from "../../slices/messages/messagesSlice";
+import { useLocation } from "react-router-dom";
 export interface UserMessage {
   userName: string;
   message: string;
@@ -32,11 +33,31 @@ export const ChatPage = () => {
     moveToTheBottom(messagesPanelRef);
   }, [messages]);
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const key = queryParams.get("key")!;
+
+  const onSubmit = (data: UserMessage) => {
+    dispatch(
+      addMessage({
+        ...data,
+        isMyMessage: true,
+        key,
+      })
+    );
+    dispatch(sendMessage({ ...data, key }));
+
+    reset({
+      ...data,
+      message: "",
+    });
+  };
+
   return (
     <div>
       <WebSocketConnection dispatch={dispatch} />
       <ChatPageStyled>
-        <ChatFormStyled onSubmit={handleSubmit(onSubmit(dispatch, reset))}>
+        <ChatFormStyled onSubmit={handleSubmit(onSubmit)}>
           <ChatPageInputStyled
             type="message"
             {...register("userName", { required: true })}
