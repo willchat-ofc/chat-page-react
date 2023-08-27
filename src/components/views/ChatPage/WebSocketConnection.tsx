@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 interface WebSocketConnectionProps {
   dispatch: ReturnType<typeof useDispatch>;
@@ -9,7 +9,9 @@ interface WebSocketConnectionProps {
 export const WebSocketConnection: React.FC<WebSocketConnectionProps> = ({
   dispatch,
 }) => {
-  const { key } = useParams();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const key = queryParams.get("key");
 
   useEffect(() => {
     dispatch({
