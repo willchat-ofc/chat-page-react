@@ -7,6 +7,7 @@ export interface Message {
   message: string;
   id: string;
   isMyMessage?: boolean;
+  key: string;
 }
 
 interface MessagesState {
@@ -28,7 +29,7 @@ const messagesSlice = createSlice({
       socket.emit("SendMessage", {
         ...payload,
         userId: "123",
-        key: "a688123fcfdcfa08b6934839ea4276",
+        key: payload.key,
       });
     },
   },

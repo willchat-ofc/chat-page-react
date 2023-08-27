@@ -8,6 +8,8 @@ const websocketMiddleware: Middleware = (storeAPI) => {
   return (next) => (action) => {
     switch (action.type) {
       case "WEBSOCKET_CONNECT":
+        console.log(action.payload.key);
+
         socket = io(action.payload.url, {
           transports: ["websocket"],
           autoConnect: true,
@@ -25,6 +27,10 @@ const websocketMiddleware: Middleware = (storeAPI) => {
           for (let msg of value) {
             storeAPI.dispatch(addMessage(msg));
           }
+        });
+
+        socket.on("Error", (err) => {
+          console.log(err);
         });
         break;
       case "WEBSOCKET_DISCONNECT":
