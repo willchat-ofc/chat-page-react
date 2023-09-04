@@ -12,7 +12,12 @@ export const ChatPageStyled = styled.div`
 `;
 
 export const ChatFormStyled = styled.form`
-  width: 49%;
+  width: 55%;
+
+  @media (max-width: 850px) {
+    width: 90%;
+  }
+
   .user-name {
     margin: 10px 0;
   }
